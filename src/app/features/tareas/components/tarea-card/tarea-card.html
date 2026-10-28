@@ -1,0 +1,36 @@
+<article
+  class="tarjeta"
+  [class.hecha]="tarea().estado === 'HECHA'"
+  draggable="true"
+  (dragstart)="alArrastrar($event)"
+>
+  <header class="cabecera">
+    <h3 class="titulo">{{ tarea().titulo }}</h3>
+    <span class="chip" [class]="'prioridad-' + tarea().prioridad.toLowerCase()">{{ etiquetaPrioridad() }}</span>
+  </header>
+
+  @if (tarea().descripcion) {
+    <p class="descripcion">{{ tarea().descripcion }}</p>
+  }
+
+  @if (fecha(); as f) {
+    <p class="fecha" [class.vencida]="vencida()">
+      <span aria-hidden="true">📅</span> {{ f }}@if (vencida()) { · vencida }
+    </p>
+  }
+
+  <footer class="acciones">
+    <div class="mover" role="group" aria-label="Mover tarea">
+      <button type="button" class="btn btn-chico" aria-label="Mover a la columna anterior"
+        [disabled]="tarea().estado === 'POR_HACER'" (click)="retroceder()">←</button>
+      <button type="button" class="btn btn-chico" aria-label="Mover a la columna siguiente"
+        [disabled]="tarea().estado === 'HECHA'" (click)="avanzar()">→</button>
+    </div>
+    <div class="mover">
+      <button type="button" class="btn btn-chico" [disabled]="tarea().estado === 'HECHA'"
+        [title]="tarea().estado === 'HECHA' ? 'Una tarea hecha no se edita' : 'Editar'"
+        (click)="editar.emit(tarea())">Editar</button>
+      <button type="button" class="btn btn-chico btn-peligro-suave" (click)="eliminar.emit(tarea())">Eliminar</button>
+    </div>
+  </footer>
+</article>

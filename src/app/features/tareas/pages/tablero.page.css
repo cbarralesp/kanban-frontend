@@ -1,0 +1,36 @@
+.encabezado { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--borde); }
+h1 { margin: 0; font-size: 1.6rem; }
+.sub { margin: 0; color: var(--texto-suave); font-size: .9rem; }
+
+.aviso-error { background: rgb(244 63 94 / .12); border: 1px solid var(--peligro); color: #fecdd3; padding: .6rem .9rem; border-radius: .6rem; margin-bottom: .75rem; }
+
+/* minmax(0, 1fr): las columnas se reparten el ancho sin generar scroll lateral */
+.tablero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; align-items: start; }
+
+/* cada columna toma su color de acento según data-estado */
+.columna { --acento: var(--por-hacer); }
+.columna[data-estado='EN_CURSO'] { --acento: var(--en-curso); }
+.columna[data-estado='HECHA'] { --acento: var(--hecha); }
+
+.columna {
+  background: var(--columna); border: 1px solid var(--borde); border-radius: .9rem;
+  display: grid; gap: .6rem; min-height: 9rem; padding: 0 .7rem .7rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / .35);
+}
+.columna.activa { border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento), 0 10px 30px rgb(0 0 0 / .35); }
+.columna.llena { --acento: var(--peligro); }
+
+.columna-cabecera {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .75rem .15rem .6rem; border-bottom: 2px solid var(--acento);
+}
+.columna-cabecera h2 { margin: 0; font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; color: var(--texto); }
+.contador { color: var(--acento); font-weight: 800; font-size: .95rem; }
+.limite { margin: 0; font-size: .8rem; font-weight: 600; color: #fda4af; }
+
+.lista { display: grid; gap: .6rem; }
+.vacia { margin: 0; text-align: center; color: var(--texto-suave); font-size: .85rem; padding: 1rem 0; }
+
+@media (max-width: 800px) {
+  .tablero { grid-template-columns: minmax(0, 1fr); }
+}

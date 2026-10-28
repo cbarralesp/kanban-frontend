@@ -1,0 +1,68 @@
+<div class="encabezado">
+  <div>
+    <h1>Mi tablero</h1>
+    <p class="sub">{{ store.resumen().total }} tareas · máximo {{ limite }} en curso a la vez</p>
+  </div>
+  <button type="button" class="btn btn-primario" (click)="formulario.set('nueva')">+ Nueva tarea</button>
+</div>
+
+@if (store.error(); as error) {
+  <div class="aviso-error" role="alert">
+    {{ error }} <button type="button" class="btn btn-chico" (click)="store.cargar()">Reintentar</button>
+  </div>
+}
+
+<section class="tablero" aria-label="Tablero Kanban">
+  @for (columna of columnas; track columna) {
+    <div
+      class="columna"
+      [attr.data-estado]="columna"
+      [class.activa]="columnaActiva() === columna"
+      [class.llena]="columna === 'EN_CURSO' && store.resumen().enCursoLleno"
+      (dragover)="alPasarSobre($event, columna)"
+      (dragleave)="columnaActiva.set(null)"
+      (drop)="alSoltar($event, columna)"
+    >
+      <header class="columna-cabecera">
+        <h2>{{ etiqueta[columna] }}</h2>
+        <span class="contador">
+          {{ store.tareasPorEstado()[columna].length }}@if (columna === 'EN_CURSO') { / {{ limite }} }
+        </span>
+      </header>
+      @if (columna === 'EN_CURSO' && store.resumen().enCursoLleno) {
+        <p class="limite" role="status">Límite alcanzado: termina una tarea antes de iniciar otra</p>
+      }
+
+      <div class="lista">
+        @for (tarea of store.tareasPorEstado()[columna]; track tarea.id) {
+          <app-tarea-card
+            [tarea]="tarea"
+            (editar)="formulario.set($event)"
+            (eliminar)="porEliminar.set($event)"
+            (mover)="mover(tarea, $event)"
+          />
+        } @empty {
+          <p class="vacia">{{ store.cargando() ? 'Cargando…' : 'Sin tareas' }}</p>
+        }
+      </div>
+    </div>
+  }
+</section>
+
+@if (formulario() !== null) {
+  <app-tarea-form
+    [tarea]="tareaEnEdicion()"
+    [guardando]="guardando()"
+    (guardar)="guardar($event)"
+    (cancelar)="formulario.set(null)"
+  />
+}
+
+@if (porEliminar(); as tarea) {
+  <app-confirm-dialog
+    titulo="Eliminar tarea"
+    [mensaje]="'¿Seguro que quieres eliminar «' + tarea.titulo + '»? No se puede deshacer.'"
+    (confirmar)="confirmarEliminar()"
+    (cancelar)="porEliminar.set(null)"
+  />
+}

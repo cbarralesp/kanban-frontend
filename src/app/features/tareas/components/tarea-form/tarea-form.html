@@ -1,0 +1,44 @@
+<div class="fondo" (click)="cancelar.emit()">
+  <form class="dialogo" [formGroup]="form" (ngSubmit)="enviar()" (click)="$event.stopPropagation()"
+    role="dialog" aria-modal="true" aria-labelledby="titulo-dialogo">
+    <h2 id="titulo-dialogo">{{ tarea() ? 'Editar tarea' : 'Nueva tarea' }}</h2>
+
+    <label class="grupo">
+      <span>Título *</span>
+      <input class="campo" formControlName="titulo" [maxlength]="reglas.tituloMaxLargo" autofocus />
+      @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+        <small class="error">El título es obligatorio (máx. {{ reglas.tituloMaxLargo }} caracteres)</small>
+      }
+    </label>
+
+    <label class="grupo">
+      <span>Descripción</span>
+      <textarea class="campo" rows="3" formControlName="descripcion" [maxlength]="reglas.descripcionMaxLargo"></textarea>
+      @if (form.controls.descripcion.touched && form.controls.descripcion.invalid) {
+        <small class="error">Máximo {{ reglas.descripcionMaxLargo }} caracteres</small>
+      }
+    </label>
+
+    <div class="fila">
+      <label class="grupo">
+        <span>Prioridad *</span>
+        <select class="campo" formControlName="prioridad">
+          <option value="BAJA">Baja</option>
+          <option value="MEDIA">Media</option>
+          <option value="ALTA">Alta</option>
+        </select>
+      </label>
+      <label class="grupo">
+        <span>Fecha límite</span>
+        <input class="campo" type="date" formControlName="fechaLimite" />
+      </label>
+    </div>
+
+    <div class="acciones">
+      <button type="button" class="btn" (click)="cancelar.emit()">Cancelar</button>
+      <button type="submit" class="btn btn-primario" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</div>

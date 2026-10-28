@@ -1,0 +1,30 @@
+:host { display: block; }
+
+.tarjeta {
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: .75rem;
+  padding: .8rem .9rem; display: grid; gap: .5rem; cursor: grab;
+  box-shadow: 0 4px 14px rgb(0 0 0 / .35);
+  transition: border-color .15s, transform .15s;
+}
+.tarjeta:active { cursor: grabbing; }
+.tarjeta:hover { border-color: #3a4766; transform: translateY(-1px); }
+.tarjeta.hecha { opacity: .75; }
+.tarjeta.hecha .titulo { text-decoration: line-through; color: var(--texto-suave); }
+
+.cabecera { display: grid; gap: .4rem; justify-items: start; }
+.titulo { margin: 0; font-size: 1rem; font-weight: 700; overflow-wrap: anywhere; }
+.descripcion { margin: 0; font-size: .85rem; color: #c3c9d8; overflow-wrap: anywhere; }
+
+.chip { padding: .1rem .6rem; border-radius: .35rem; font-size: .75rem; font-weight: 700; }
+.prioridad-alta { background: #be185d; color: #fff; }
+.prioridad-media { background: #f59e0b; color: #1c1300; }
+.prioridad-baja { background: #16a34a; color: #fff; }
+
+.fecha { margin: 0; font-size: .8rem; color: var(--texto-suave); }
+.fecha.vencida { color: #fb7185; font-weight: 600; }
+
+.acciones {
+  display: flex; justify-content: space-between; align-items: center; gap: .4rem; flex-wrap: wrap;
+  padding-top: .55rem; border-top: 1px solid var(--borde);
+}
+.mover { display: flex; gap: .3rem; }
